@@ -26,8 +26,7 @@ package com.company.sip;
 /**
  *
  * @author jakob
- * @param <T>
  */
-public interface Step<T> {
-    void perform(T context);
+public interface Step {
+    void perform(Process process);
 }

@@ -27,9 +27,6 @@ package com.company.sip;
  *
  * @author jakob
  */
-public interface SequentialProcess {
-    void moveTo(Step<? super SequentialProcess> step);
-    void set(Object obj);
-    <T> T get();
-    void finish();
+public interface Process {
+    void setNextStep(Step step);
 }

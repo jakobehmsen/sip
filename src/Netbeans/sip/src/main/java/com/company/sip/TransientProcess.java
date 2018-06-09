@@ -27,40 +27,25 @@ package com.company.sip;
  *
  * @author jakob
  */
-public class TransientSequentialProcess implements SequentialProcess {
-    private Step<? super SequentialProcess> currentStep;
-    private boolean finished;
-    private Object obj;
+public class TransientProcess implements Process {
+    private Step nextStep;
     
-    public TransientSequentialProcess(Step initialStep) {
-        currentStep = initialStep;
+    public TransientProcess(Step initialStep) {
+        nextStep = initialStep;
     }
 
     @Override
-    public void moveTo(Step<? super SequentialProcess> step) {
-        currentStep = step;
-    }
-
-    @Override
-    public void set(Object obj) {
-        this.obj = obj;
-    }
-
-    @Override
-    public <T> T get() {
-        return (T) obj;
-    }
-
-    @Override
-    public void finish() {
-        finished = true;
+    public void setNextStep(Step step) {
+        nextStep = step;
     }
     
     public void proceed() {
-        currentStep.perform(this);
+        Step step = nextStep;
+        nextStep = null;
+        step.perform(this);
     }
     
     public boolean isFinished() {
-        return finished;
+        return nextStep == null;
     }
 }

@@ -31,27 +31,24 @@ import java.util.Arrays;
  */
 public class Main {
     public static void main(String[] args) {
-        Step<? super SequentialProcess> steps = SequentialProcessSteps.seq(Arrays.asList(
-            new Step<SequentialProcess>() {
-                @Override
-                public void perform(SequentialProcess context) {
-                    context.set(1);
-                }
-            }, 
-            new Step<SequentialProcess>() {
-                @Override
-                public void perform(SequentialProcess context) {
-                    int i = context.get();
-                    System.out.println("i=" + i);
-                    context.set(null);
-                }
+        Step steps = new Step() {
+            @Override
+            public void perform(Process process) {
+                int i = 1;
+                
+                process.setNextStep(new Step() {
+                    @Override
+                    public void perform(Process process) {
+                        System.out.println("i=" + i);
+                    }
+                });
             }
-        ));
+        };
         
-        TransientSequentialProcess tsp = new TransientSequentialProcess(steps);
+        TransientProcess tp = new TransientProcess(steps);
         
-        while(!tsp.isFinished()) {
-            tsp.proceed();
+        while(!tp.isFinished()) {
+            tp.proceed();
         }
     }
 }
